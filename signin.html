@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>注册功能（表单校验）-Javascript Class Notes</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript">
+      /*开发并注册表单*/
+      function check() {//form设置了onsubmit=check()，也就是当表单点击提交的时候就会调用check函数
+      /*  alert("check");*/
+        /*数据校验 */
+        /*获取html元素的时候，基本都要用document*/
+          var username = document.getElementById("username");
+          var usernameMsg =document.getElementById("usernameMsg");
+          var emailMsg =document.getElementById("emailMsg");
+          var passwordMsg =document.getElementById("passwordMsg");
+          var repasswordMsg =document.getElementById("repasswordMsg");
+
+          var isPass= true;
+          var length= username.value.length;
+          if(length<3 || length>6) {
+              //manzu tiaojian buzuochuli
+              usernameMsg.innerText="用户名长度必须是3-6位";
+              isPass=false;
+
+          }else{ //bu manzu tiaojian geichu tishi
+            //alert("yonghuming changdu bixu shi 3-6wei");
+            /*innerText(font zhongjian de neirong ): xiugai biaoqian limian neirong  */
+              usernameMsg.innerText="";
+          }
+
+          /*zhijie huoqu yonghu shuru de youxiang */
+          var email = document.getElementById("email").value;
+          var length= username.value.length;
+          /*zhengze biaodashi */
+          var p = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+          if(p.test(email)==false){
+            //alert("youxiang geshi buzhengque");
+            emailMsg.innerText="youxiang geshi buzhengque";
+            isPass=false;
+          }else{
+            emailMsg.innerText=" ";
+          }
+
+          var password = document.getElementById("password").value;
+          var repassword = document.getElementById("repassword").value;
+          if(password.length<6 || password.length>10  ) {
+            //alert("mima buxu zai 6-10 wei zhijian");
+            passwordMsg.innerText="mima buzhengque";
+            isPass=false;
+          } else{
+            passwordMsg.innerText=" ";
+            if(password!=repassword) {
+              //  alert("nin liangci shuru de mima bu yizhi");
+              passwordMsg.innerText="mima buzhengque";
+                isPass=false;
+            }else{
+              passwordMsg.innerText="Success!";
+            }
+          }
+
+        /*  if(isPass==false){
+            return false;
+
+          }else{
+            return true;
+          }*///ruxia jianxie
+          return isPass;
+          /* xiayibu,panduan shifou jiaoyan tongguo  jian pass de boolean biaodashi (above)*/
+
+          //eturn false; //onsubmit hui qude fanhuishi ,ruguo shi false ,tijiao neirong jiu buhui tiaozhuan dao register.jsp
+
+          //onblur 失去焦点的时候调用
+          //jiaoyan yonghu ming
+          function checkUsername(username) { //yinwei onlbur yongle this,keyi zhijie chuandi canshu uesername
+            var usernameMsg = document.getElementById("usernameMsg");
+
+            var length= username.value.length;
+            if(length<3 || length>6) {
+                //manzu tiaojian buzuochuli
+                usernameMsg.innerText="用户名长度必须是3-6位";
+            }else{
+                usernameMsg.innerText="";
+            }
+          }
+
+          //jiaoyan youxiang
+          function checkEmail(email) { //yinwei onlbur yongle this,keyi zhijie chuandi canshu uesername
+            var emailMsg = document.getElementById("emailMsg");
+            var p = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+            if(p.test(email.value)==false){
+              emailMsg.innerText="youxiang geshi buzhengque";
+            }else{
+              emailMsg.innerText=" ";
+            }
+          }
+
+          //jiaoyan mima
+          function checkPassword() { //buchuandi this yinwei liangge yuansu douyong zhege jiaoyan fangfa
+            return false;//数据错误将不跳转到action后的网页
+            var repasswordMsg = document.getElementById("passwordMsg");
+            var password =document.getElementById("password");
+            var repassword = document.getElementById("repassword").value;
+            if(password.value.length<3 || password.value.length>10) {
+                passwordMsg.innerText="用户名长度必须是3-6位";
+            }else{
+                passwordMsg.innerText="";
+                if(password.value != repassword){
+                  passwordMsg.innerText="liangci shuru buyiyang"
+                }else{
+                  passwordMsg.innerText="";
+                }
+            }
+          }
+
+
+      }
+      //html zhong shijie shezhi div onclick="divClick()"
+      function divClick() {
+        console.log("DIV is clicked!");
+      }
+      //lingyizhong fangfa shi tongguo js daima(onclick) tianjia DOM shijian
+      var myspan = document.getElementById("mySpan");//xian huoqu mySpan
+      //tongguo myspan fuzhi gei yige niming hanshu,tianjia click shijian
+      myspan.onclick = function () {
+          console.log("span is clicked!");
+      }
+      //lingyiz fangfa,tongguo addEvent tianjia
+      myspan.addEventListener("click",spanClick);// onclick -click jiushyi shijian de mingzi ;("shijian",hanshu mingzi),zhijie gei hanshu mingzi ,buyao jia kuohao ,biaoshi click zhihou ,chufa gai hanshu
+      function spanClick() {//dingyi yige hanshu ,mingzi jiao spanclic
+        console.log("span is clicked!");
+      }
+      //yekeyi shiyong niming hanshu de fangfa
+      myspan.addEventListener("click",function(){
+        console.log("span is clicked!");
+      });
+
+      //DOM  文档对象模型
+      //方法1:通过ID获取HTML元素 （先再html里面给元素设置ID） :var div  = document.getElementById(“one”);
+      /*null 的使用方法，其中一个方法就是用来清空对象。例如
+      var person = new Object();//kong duixiang
+      person = null;//qingkong duixiang;meiyou zhixiang renhe duixiang*/
+      //var person = null;//chuangjian kong duixiang
+      //person.name = "siki";
+      /*方法2:通过tagname（标签名获取）：
+      （1）通过document调用，搜索范围是整个网页内的div 标签元素  var div = document.getElementsByTagName(“div”)
+      （2）调取 div标签里面所有的span，返回数组（而通过对象div调用，搜索范围是其子元素）。var arr1 = div.getElementsByTagName(“span”);
+      */
+      /*方法3:通过类名（ClassName）调取
+      var arr2 = document.getElementsByClassName(“one”)
+      */
+
+      /*通过标签的name属性调取
+      var arr3 = document.getElementsByName(“last”)
+      */
+
+      //对元素的三种操作：设置内容，设置属性，设置css样式
+      /*设置内容
+      （第一步，先获取）var p = document.getElementById("three");
+      (第二步，修改内容)p.innerText="siki";  Id 为p里面的内容被siki替换
+      （第二步，修改内容方法2）p.innerHTML="<font>siki</font>"// 两者区别：text只添加文本，html可以添加其他html标签
+      */
+      /*设置属性
+      （第一步，先获取标签） var myFont = document.getElementById("myfont");
+      (第二步，设置属性) myfont.setattribute("属性名"，“属性值”);
+      也可以获取属性的值，var size = myfont。getAttribute（“size”）
+      */
+
+      //修改超链接，图片，复选框和css样式的单独函数
+      /*
+      （第一步，获取a标签）var mya= document.getElementById("mya");
+      （第二步，获取图片） var myimg = document.getElementById("myimg");
+      （第三步，获得复选框）var mycheckbox = document.getElementById("mychechbox");
+      （第四部，设置a，img，checkbox） mya。setAttribute（“href”，“修改后的网址”）；简写如下
+                          mya。href=“修改后的网址”；//先在html里面设置id=mya
+                          myimg。setAttribute（“src”，“修改后的图片地址”）；
+                          myimg。src=“修改后的图片位置”
+                          mycheckbox。setAttribute（“checked”，“true”）；//先在input里面设置type=checkbox&id=mychcekbox
+                          mycheckbox。checked = true；//因为是boolean值
+      */
+      //修改CSS样式
+      /*
+      获取内容  mydiv = document.getElementById("mydiv");
+      修改字体  mydiv。style。fontSize=“20px”；
+      修改颜色 mydiv。color=“red”；
+      */
+
+      //给元素添加DOM事件的三种方式。DOM事件：例如submit（点击后触发信息提交）
+      /*
+        onclick,addEvent he niming hanshu de fangshi tianjia yuansu de DOM shijian
+      */
+
+      /*changjian de DOM shijian*/
+      // onload  biaoshi biaoqian bei jiazai chulai zhihou ,jiuhui zhixing de shijian;wangye jiazai wan zhixing-fangzai body
+      function init() {
+          console.log("wangye jiazai wancheng!");
+
+      }
+      //onunload
+      function onunload() {
+        console.log("wangye bei tiaozhuan!");
+      }
+      //likai yemian xianshi  shibai
+      function beforunload() {
+        return"are you sure to leave?" ;
+      }
+
+      function inputChange(input) { //ba input yuansu chuandi guolai
+        console.log("yonghu shuru neirong fasheng gaibian"+ input.value);
+      }
+
+      //gei p tianjia zi biaoqian
+      /*myp = document.getElementById("myp");//zhiqian de fangfa gei p tianjia zi biaoqian
+      myp.innerHTML="<span>diwuge  span </span>";*/
+      //xin fangfa
+      var newSpan = document.createElement("span");//chuang jian span jiedian，但是span标签还没放在div里面，只是在此处创建出来了
+      //mydiv.appendChild(newSpan); //tianjia dao div limian,yinwei meiyou wenben ,suoyi kanbujian
+      var textNode=document.createTextNode("woshi diwuge span");//yekeyi zhijie chuangjian wenben jiedian,ba wenben jiedian de neirong dangzuo canshu chuandi guolai
+      //newSpan.innerText="woshi diwuge";//mei xianshi chengguo (tongguo mydiv diaoyong ,xinde jiedian jiu guazai le div xiamian)
+      newSpan.appendChild(textNode);//var chuangjian wenben jiedian zhihou ,tongguo append tianjia jinqu;shangfang zhijie tongguo inner xiugai biaoqian limian de neirong
+      mydiv.appendChild(newSpan);
+    </script>
+
+  </head>
+  <!-- init()   onload  biaoshi biaoqian bei jiazai chulai zhihou ,jiuhui zhixing de shijian;
+  wangye jiazai wan zhixing-fangzai body-->
+  <!-- onunload butong wangzhan huiyou butong de xianshi leisi you onbeforunload -->
+  <!--onbeforeunload you fanhuizhi ,wangye tiaozhuan qian gei tishi kuang-->
+  <body onload = "init()"  onunload="onunload()"  onbeforeunload="return beforUnload">
+    <!--likai wangye hou de tiaozhuan lianjie-->
+    <a href="https://www.sikiedy.com">DOM shijian</a>
+
+    <!-- on   shijian-->
+    <!--传递this-->
+    <!--<input type="text" onchange="inputChange(this)">-->
+    <!-- onmouseover onmouseout  onmousedown ,onmouseup 鼠标滑上，滑出，按下，抬起，操作同理-->
+    <!--action:表单提交的时候信息传递到的网页 -->
+    <form action="register.jsp"  onsubmit="return check()">
+      <!--return check ,取得返回值以后，再跳转。区别与check（）-->
+      <!--onsubmit="check()" dang biaodan bei tijiao de shihou ,jiuhui diaoyong js limian de check hanshu -->
+      <!--action biaoshu zhuce zhihou hui tijiao dao register.jsp-->
+      <table border="1" width="500px" height="500px">
+        <tr>
+          <td colspan="2" align="center">注册</td>
+        </tr>
+
+        <tr align="right">
+          <!--add id-->
+          <!-- onblur="alert("checkUsername")"shijian limian keyi chuandi this ,ji onblur="alert("this")",dang shiqu jiaodian de shihou
+          diaoyong onblur hanshu ,this daibiao dangqian input zhege yuansu (input tianjia de shijian )-->
+          <td align="right">用户名：</td> <td align="left"><input type="text" id="username" onblur="alert("checkUsername")"/></td>
+          <font color="red" id="usernameMsg"> </font>
+        </tr>
+
+        <tr>
+          <td align="right">邮箱：</td> <td align="left"><input type="text" id="email" onblur="checkEmail(this)"/></td>
+          <font color="red" id="emailMsg"> </font>
+        </tr>
+
+        <tr>
+          <td align="right">密码：</td> <td align="left"><input type="password" id ="password" onblur="checkPasswordl()"/></td>
+          <font color="red" id="passwordMsg"> </font>
+        </tr>
+
+        <tr>
+          <td align="right">重复密码：</td> <td align="left"><input type="password" id="repassword" onblur="checkPasswordl()"/></td>
+          <font color="red" id="repasswordMsg"> </font>
+        </tr>
+
+        <tr>
+        <!--tongguo shezhi value=zhuce,anniu dianji zhihou huicong tijiao biancheng zhuce-->
+          <td colspan="2" align="center"><input type="submit"  value="注册"/></td>
+        </tr>
+      </table>
+
+    </form>
+
+    <!-- DOM shijian-->
+    <!-- liangzhong fangshi  doushi tongguo onclick shuxing tianjia shijian -->
+    <div onclick="console.log('I am clicked!');">
+      DOM shijian
+    </div>
+    <div onclick="divClick();">
+      DOM shijian
+    </div>
+    <!-- lingyizhong fangfa shi tongguo js daima tianjia DOM shijian-->
+    <span id="myspan">DOM shijian</span>
+
+  <!--chuangjian DOM jiedian-->
+    <div id = "mydiv">
+      <span>diyige</span>
+      <span>dierge</span>
+      <span>disange</span>
+      <span>disige</span>
+      <p  id ="myp"></p>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+  <!--  <script type="text/javascript">
+      //alert("Hello");
+    </script>-->
+  </body>
+</html>
